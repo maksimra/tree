@@ -17,3 +17,5 @@ void tree_dtor (Node* node);
 void delete_node (Node* node, int num);
 
 void search_node (Node* node, int num, Node** necessary_node);
+
+void search_parent_node (Node* node, int num, Node** parent_node);

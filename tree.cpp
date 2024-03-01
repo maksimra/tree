@@ -55,8 +55,24 @@ void tree_dtor (Node* node)
 void delete_node (Node* node, int num)
 {
     Node* necessary_node = NULL;
+    Node* parent_node = NULL;
     search_node (node, num, &necessary_node);
-    
+    search_parent_node (node, num, &parent_node);
+
+    if (necessary_node->data > parent_node->data)
+        parent_node->right = necessary_node->right;
+
+    else
+        parent_node->left = necessary_node->right;
+
+    Node*
+    necessary_node = necessary_node->right;
+
+    while (necessary_node->left != NULL)
+        necessary_node = necessary_node->left;
+
+    necessary_node->left =
+
 }
 
 void search_node (Node* node, int num, Node** necessary_node)
@@ -82,6 +98,37 @@ void search_node (Node* node, int num, Node** necessary_node)
         else
         {
             *necessary_node = node;
+            break;
+        }
+    }
+}
+
+void search_parent_node (Node* node, int num, Node** parent_node)
+{
+    Node* prev_node = NULL;
+    while (1)
+    {
+        if (num > node->data)
+        {
+            if (node->right != NULL)
+            {
+                prev_node = node;
+                node = node->right;
+                continue;
+            }
+        }
+        else if (num < node->data)
+        {
+            if (node->left != NULL)
+            {
+                prev_node = node;
+                node = node->left;
+                continue;
+            }
+        }
+        else
+        {
+            *parent_node = prev_node;
             break;
         }
     }
