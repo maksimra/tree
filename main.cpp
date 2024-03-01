@@ -14,5 +14,6 @@ int main (void)
     node_insert (tree, 71);
     node_insert (tree, 105);
     tree_print (tree);
+    delete_node (tree, 130);
     return 0;
 }

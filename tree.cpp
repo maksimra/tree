@@ -51,3 +51,38 @@ void tree_dtor (Node* node)
         tree_dtor (node->right);
     free (node);
 }
+
+void delete_node (Node* node, int num)
+{
+    Node* necessary_node = NULL;
+    search_node (node, num, &necessary_node);
+    
+}
+
+void search_node (Node* node, int num, Node** necessary_node)
+{
+    while (1)
+    {
+        if (num > node->data)
+        {
+            if (node->right != NULL)
+            {
+                node = node->right;
+                continue;
+            }
+        }
+        else if (num < node->data)
+        {
+            if (node->left != NULL)
+            {
+                node = node->left;
+                continue;
+            }
+        }
+        else
+        {
+            *necessary_node = node;
+            break;
+        }
+    }
+}
