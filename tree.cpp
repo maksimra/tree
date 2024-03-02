@@ -1,5 +1,12 @@
 #include "tree.h"
 
+static FILE* log_file = stderr;
+
+void tree_set_log_file (FILE* file)
+{
+    log_file = file;
+}
+
 void node_insert (Node* node, int num)
 {
     Node* temp = (Node*) calloc (1, sizeof (Node)); // динамический массив подвязывать
@@ -31,16 +38,16 @@ void node_insert (Node* node, int num)
 
 void tree_print (Node* node)
 {
-    printf ("{ %d\n", node->data);
+    fprintf (log_file, "{ %d\n", node->data);
     if (node->left != NULL)
         tree_print (node->left);
     else
-        printf ("0\n");
+        fprintf (log_file, "0\n");
     if (node->right != NULL)
         tree_print (node->right);
     else
-        printf ("0");
-    printf ("\n}\n");
+        fprintf (log_file, "0");
+    fprintf (log_file, "\n}\n");
 }
 
 void tree_dtor (Node* node)
@@ -60,19 +67,33 @@ void delete_node (Node* node, int num)
     search_parent_node (node, num, &parent_node);
 
     if (necessary_node->data > parent_node->data)
-        parent_node->right = necessary_node->right;
-
+    {
+        if (necessary_node->right != NULL)
+            parent_node->right = necessary_node->right;
+        else if (necessary_node->left != NULL)
+            parent_node->right = necessary_node->left;
+        else
+            parent_node->right = NULL;
+    }
     else
-        parent_node->left = necessary_node->right;
+    {
+        if (necessary_node->right != NULL)
+            parent_node->left = necessary_node->right;
+        else if (necessary_node->left != NULL)
+            parent_node->left = necessary_node->left;
+        else
+            parent_node->left = NULL;
+    }
 
-    Node*
-    necessary_node = necessary_node->right;
+    if (necessary_node->right == NULL || necessary_node->left == NULL)
+        return;
 
-    while (necessary_node->left != NULL)
-        necessary_node = necessary_node->left;
+    Node* current_node = necessary_node->right;
 
-    necessary_node->left =
+    while (current_node->left != NULL)
+        current_node = current_node->left;
 
+    current_node->left = necessary_node->left;
 }
 
 void search_node (Node* node, int num, Node** necessary_node)
